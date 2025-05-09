@@ -48,7 +48,17 @@ public class ApplicationDbContext : DbContext
             .WithOne(p => p.Moneda) // Un presupuesto pertenece a una moneda
             .HasForeignKey(p => p.MonedaId) // Clave foránea en Presupuesto
             .OnDelete(DeleteBehavior.Restrict); // Evitar eliminación en cascada
-                                                // Configuraciones adicionales (opcional)
+
+        // Configuración de propiedades decimales
+        modelBuilder.Entity<Gastos>()
+            .Property(g => g.Monto)
+            .HasPrecision(18, 2); // 18 dígitos en total, 2 decimales
+
+        modelBuilder.Entity<Presupuestos>()
+            .Property(p => p.Limite)
+            .HasPrecision(18, 2); // 18 dígitos en total, 2 decimales
+
+        // Configuraciones adicionales (opcional)
         modelBuilder.Entity<Usuarios>()
             .HasIndex(u => u.Email) // Índice único para el correo electrónico
             .IsUnique();

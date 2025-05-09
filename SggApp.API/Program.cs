@@ -1,28 +1,45 @@
 using Microsoft.EntityFrameworkCore;
+using SggApp.API.Data;
+using SggApp.BLL.Interfaces;
+using SggApp.BLL.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-// Agregar DbContext con la cadena de conexión desde appsettings.json
+// Configurar servicios
+builder.Services.AddControllers();
+
+// Configurar Swagger/OpenAPI
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new() { Title = "Sistema de Gestión de Gastos API", Version = "v1" });
+});
+
+// Configurar DbContext con la cadena de conexión desde appsettings.json
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddOpenApi();
+// Inyección de dependencias para servicios BLL
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<ICategoriaService, CategoriaService>();
+builder.Services.AddScoped<IGastoService, GastoService>();
+builder.Services.AddScoped<IPresupuestoService, PresupuestoService>();
+builder.Services.AddScoped<IMonedaService, MonedaService>();
 
 var app = builder.Build();
 
-app.MapControllers();
-app.Run();
-
-// Configure the HTTP request pipeline.
+// Ejecutar seeder para datos iniciales
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    // Inicializar datos de prueba
+    await Seeder.SeedData(app.Services);
 }
 
-app.UseHttpsRedirection();
+// Configurar Swagger siempre disponible
+app.UseSwagger();
+app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Sistema de Gestión de Gastos API v1"));
 
+// Endpoint de ejemplo para desarrollo    
 var summaries = new[]
 {
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -41,6 +58,10 @@ app.MapGet("/weatherforecast", () =>
     return forecast;
 })
 .WithName("GetWeatherForecast");
+
+app.UseHttpsRedirection();
+app.UseAuthorization();
+app.MapControllers();
 
 app.Run();
 

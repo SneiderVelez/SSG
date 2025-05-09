@@ -12,3 +12,4 @@ C:\Users\nilto\Documents\projects\pascual\sistema_gestion_Gasto\SggApp.DAL\obj\D
 C:\Users\nilto\Documents\projects\pascual\sistema_gestion_Gasto\SggApp.DAL\obj\Debug\net9.0\SggApp.DAL.pdb
 C:\Users\nilto\Documents\projects\pascual\sistema_gestion_Gasto\SggApp.DAL\obj\Debug\net9.0\SggApp.DAL.genruntimeconfig.cache
 C:\Users\nilto\Documents\projects\pascual\sistema_gestion_Gasto\SggApp.DAL\obj\Debug\net9.0\ref\SggApp.DAL.dll
+C:\Users\nilto\Documents\projects\pascual\sistema_gestion_Gasto\SggApp.DAL\obj\Debug\net9.0\SggApp.DAL.sourcelink.json
